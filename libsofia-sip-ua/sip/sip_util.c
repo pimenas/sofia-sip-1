@@ -226,6 +226,7 @@ sip_contact_string_from_via(su_home_t *home,
   char const *scheme = "sip:";
   int one = 1;
   char _transport[16];
+  char *contact_ip = secure_getenv("CONTACT_IP");
 
   if (!v) return NULL;
 
@@ -271,7 +272,7 @@ sip_contact_string_from_via(su_home_t *home,
 		       "<",
 		       scheme,
 		       user ? user : "", user ? "@" : "",
-		       host,
+		       contact_ip ? contact_ip : host,
 		       SIP_STRLOG(":", port),
 		       SIP_STRLOG(";transport=", transport),
 		       SIP_STRLOG(";maddr=", maddr),
