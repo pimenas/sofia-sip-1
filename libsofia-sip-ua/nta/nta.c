@@ -2472,6 +2472,8 @@ int agent_init_contact(nta_agent_t *self)
 {
   sip_via_t const *v1, *v2;
   char const *tp;
+  char const *contact_ip;
+  sip_via_t *v;
 
   if (self->sa_contact)
     return 0;
@@ -2512,6 +2514,13 @@ int agent_init_contact(nta_agent_t *self)
 	su_casematch(p2, sip_transport_tcp))
       /* Do not include transport if we have both UDP and TCP */
       tp = NULL;
+  }
+
+  // override contact/via ip from env var
+  contact_ip = secure_getenv("CONTACT_IP");
+  if (contact_ip) {
+    v = v1;
+    v->v_host = contact_ip;
   }
 
   self->sa_contact =
